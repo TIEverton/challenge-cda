@@ -10,6 +10,18 @@ export const HeaderComponent = styled.header`
   justify-content: space-between;
   padding: 0rem 3rem;
 
+  @keyframes animationContentHeader{
+    from {  
+      opacity: 0;
+      transform: translateY(-50px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  animation: animationContentHeader .6s;
+
   @media (max-width: 1024px) {
     padding: 0rem 1rem;
   }
