@@ -4,31 +4,30 @@ import React, {
 import { IconBaseProps } from 'react-icons';
 import { useField } from '@unform/core';
 import { Container, Error } from './styles';
+import { Link } from 'react-router-dom';
+
+import { RiEyeFill, RiEyeOffFill } from 'react-icons/ri';
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   name: string;
   label: string;
-  icon: React.ComponentType<IconBaseProps>;
-  type: string;
+  icon?: React.ComponentType<IconBaseProps>;
   id: string;
-  value: string;
   placeholder: string;
-  setValue: (value: string) => void;
 }
 
 export function Input({
   name,
   label,
   icon: Icon,
-  type,
   id,
-  value,
-  setValue,
   ...rest
 }: InputProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [isFocused, setIsFocused] = useState(false);
   const [isField, setIsField] = useState(false);
+  const [changeEya, setChangeEya] = useState(true);
+
 
   const { fieldName, error, registerField } = useField(name);
 
@@ -57,17 +56,37 @@ export function Input({
       <label htmlFor={id} className="containerLabel"><span>{label}</span></label>
 
       <div className="iconInput">{Icon && <Icon size={20} />}</div>
-      <input
-        type={type}
-        id={id}
-        name={id}
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
-        onFocus={handleInputFocus}
-        onBlur={handleInputBlur}
-        ref={inputRef}
-        {...rest}
-      />
+      {name === 'password' ? (
+        <input
+          id={id}
+          name={id}
+          onFocus={handleInputFocus}
+          onBlur={handleInputBlur}
+          ref={inputRef}
+          type={changeEya ? 'password' : 'text'}
+          {...rest}
+        />
+      ) :
+        <input
+          id={id}
+          name={id}
+          onFocus={handleInputFocus}
+          onBlur={handleInputBlur}
+          ref={inputRef}
+          {...rest}
+        />
+      }
+      {
+        name === 'password' && (
+          <Link to="" className="button-eye" onClick={() => { setChangeEya(!changeEya) }}>
+            {
+              changeEya ? <RiEyeFill size="20" fill="#9b9b9b" /> : <RiEyeOffFill size="20" fill="#9b9b9b" />
+            }
+
+          </Link>
+        )
+      }
+
       {error && (
         <Error>
           <span>{error}</span>

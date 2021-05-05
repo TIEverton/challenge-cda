@@ -11,10 +11,16 @@ export const Container = styled.div<ContainerProps>`
   position: relative;
   display: flex;
   flex-direction: column;
+
+  .button-eye {
+    position: absolute;
+    top: 72%;
+    right: 1rem;
+    transform: translateY(-50%); 
+  }
   
   & + div {
     margin-top: 1.6rem;
-    margin-bottom: 3rem;
   }
 
   color: ${(props) => (props.isFocused ? '#F9B036'
@@ -70,7 +76,6 @@ export const Container = styled.div<ContainerProps>`
     && css`
         border-color: #DB4663;
       `}
-
   }
 `;
 
