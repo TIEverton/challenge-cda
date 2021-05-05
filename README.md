@@ -19,3 +19,13 @@
     <img alt="Stargazers" src="https://img.shields.io/github/stars/TIEverton/challenge-cda?color=8257E5&logo=github&style=for-the-badge">
   </a>
 </p>
+
+## 💻 Project
+
+## ✨ Technologies
+
+## 🔥 Preview
+
+## 🔖 Layout
+
+## 🚀 Getting started
