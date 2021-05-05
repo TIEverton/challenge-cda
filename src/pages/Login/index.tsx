@@ -10,16 +10,23 @@ import { Input } from '../../components/Input';
 import { Container, LoginLeft, LoginRight } from './styles';
 
 import Logo from '../../assets/logo-cda.svg';
+import { toast } from 'react-toastify';
+import api from '../../services/api';
+
+import { connect } from 'react-redux';
+import * as actionsAuthenticated from '../../store/actions/authenticated';
+import Spinner from '../../components/Spinner';
+import Music from '../../components/Music';
 
 interface FormAttributes {
-  documento: string;
+  username: string;
   password: string;
 }
 
-export function Login() {
+function Login({ fetchAuthenticated }: any) {
   const formRef = useRef<FormHandles>(null);
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = useCallback(
     async (data: FormAttributes) => {
@@ -35,16 +42,26 @@ export function Login() {
         await schema.validate(data, {
           abortEarly: false,
         });
+        setLoading(true)
+        const response = await api.get(`/usuarios?nome=${data.username}&senha=${data.password}`)
+        if (response.data.length <= 0) {
+          toast.error('😥 Seus dados estão incorretos!');
+          setLoading(false)
+        } else if (response.data.length >= 1) {
+          fetchAuthenticated(true, response.data[0].nome);
+          toast.success('🥰 Você logou com sucesso!');
+        }
+        setLoading(false);
       } catch (err) {
+        setLoading(false)
         if (err instanceof Yup.ValidationError) {
           const errors = getValidationErrors(err);
           formRef.current?.setErrors(errors);
-
           return;
         }
       }
     },
-    [],
+    [fetchAuthenticated],
   );
 
   return (
@@ -57,34 +74,41 @@ export function Login() {
             type="text"
             id="username"
             name="username"
-            value={username}
-            setValue={setUsername}
             label="Usuário"
             icon={RiAccountPinCircleFill}
             placeholder="Digite seu usuário"
           />
           <Input
-            type="password"
             id="password"
             name="password"
-            value={password}
-            setValue={setPassword}
             label="Senha"
             icon={RiLockFill}
             placeholder="Digite sua senha"
           />
-          <button type="submit">
-            Entrar
-        </button>
+          <button type="submit" disabled={!!loading}>
+            {loading ? <Spinner /> : 'Entrar'}
+          </button>
+
         </Form>
       </LoginLeft>
       <LoginRight>
-        <div>
+        <div className="textLogin">
           <p>DEPARTAMENTO DA POLÍCIA MILITAR</p>
           <span>CIDADE ALTA</span>
           <div />
         </div>
       </LoginRight>
+      <div className="audioPlay">
+        <Music />
+      </div>
     </Container>
   )
 }
+
+
+const mapDispatchToProps = (dispatch: any) => ({
+  fetchAuthenticated: (isAuthenticated: boolean, nome: string) =>
+    dispatch(actionsAuthenticated.fetchAuthetication(isAuthenticated, nome)),
+});
+
+export default connect(null, mapDispatchToProps)(Login)
