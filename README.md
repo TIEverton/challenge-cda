@@ -40,7 +40,7 @@ The project consists of the development of a system to control the criminal code
 ## 🔥 Preview
 
 You can view the production version through the button below <br><br>
-[![Deploy with Netlify](https://www.netlify.com/img/deploy/button.svg)](https://penalcodesystemcda.netlify.app/)
+[![Deploy with Vercel](https://vercel.com/button)](https://challenge-cda.vercel.app/)
 
 ## 🔖 Layout
 
