@@ -323,3 +323,19 @@ export const ModalStyled = styled(Modal) <ModalProps>`
     }
   }
 `;
+
+export const ModalStyledDelete = styled(Modal)`
+  p {
+    margin-bottom: 2rem;
+  }
+
+  div {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between; 
+
+    button {
+      width: 50%;
+    }
+  }
+`;

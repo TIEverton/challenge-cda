@@ -14,6 +14,7 @@ import {
   ContentCard,
   Loading,
   ModalStyled,
+  ModalStyledDelete
 } from './styles';
 
 import { v4 as uuidv4 } from 'uuid';
@@ -63,10 +64,12 @@ function Dashboard({ fetch, codePenals, add, remove, edit, orderActive, orderIna
 
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenEdit, setIsOpenEdit] = useState(false);
+  const [isOpenDelete, setIsOpenDelete] = useState(false);
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState(1);
 
   const [idEdit, setIdEdit] = useState<number | string>();
+  const [idRemove, setIdRemove] = useState('');
 
   const [nome, setNome] = useState('');
   const [descricao, setDescricao] = useState('');
@@ -79,8 +82,6 @@ function Dashboard({ fetch, codePenals, add, remove, edit, orderActive, orderIna
   });
 
   const [isChecked, setIsChecked] = useState(true);
-
-
 
   useEffect(() => {
     if (filteredStatus.actived === true || filteredStatus.inactived === true) {
@@ -116,8 +117,15 @@ function Dashboard({ fetch, codePenals, add, remove, edit, orderActive, orderIna
     setStatus(2)
   }
 
-  function handleRemovePenal(id: string) {
-    remove(id)
+  function handleOpenDelete(id: string) {
+    setIsOpenDelete(true)
+    setIdRemove(id)
+  }
+
+  function handleRemove() {
+    remove(idRemove)
+    toast.success('Código penal removido')
+    setIsOpenDelete(false)
   }
 
   const handleEditPenal = useCallback(
@@ -153,6 +161,7 @@ function Dashboard({ fetch, codePenals, add, remove, edit, orderActive, orderIna
           dados,
           id
         )
+        toast.success('Código penal editado')
         setIsOpenEdit(false);
       } catch (err) {
         if (err instanceof Yup.ValidationError) {
@@ -262,7 +271,7 @@ function Dashboard({ fetch, codePenals, add, remove, edit, orderActive, orderIna
                 <CardTop>
                   <RiDoorLockBoxFill size={36} />
                   <div>
-                    <button type="button" onClick={() => handleRemovePenal(penal.id)}>
+                    <button type="button" onClick={() => handleOpenDelete(penal.id)}>
                       <RiDeleteBin2Fill size={26} />
                     </button>
                     <button type="button" onClick={() => handleEditModal(penal.id)}>
@@ -451,6 +460,43 @@ function Dashboard({ fetch, codePenals, add, remove, edit, orderActive, orderIna
             </Button>
           </Form>
         </ModalStyled>
+      )}
+
+      { isOpenDelete && (
+        <ModalStyledDelete
+          isOpen={isOpenDelete}
+          onRequestClose={() => setIsOpenDelete(false)}
+          ariaHideApp={false}
+          style={{
+            content: {
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              right: "auto",
+              bottom: "auto",
+              marginRight: "-50%",
+              transform: "translate(-50%, -50%)",
+              background: "#F0F0F5",
+              borderRadius: "8px",
+              border: "none",
+              padding: "40px",
+            },
+            overlay: {
+              backgroundColor: "#121214e6",
+            },
+          }}
+        >
+          <Form onSubmit={handleEditPenal} className="formLogin" ref={formRef}>
+            <h2>Remover código penal</h2>
+            <p>Você tem certeza que deseja remover o código penal?</p>
+            <div>
+              <button onClick={() => setIsOpenDelete(false)}>Cancelar</button>
+              <Button type="submit" onClick={() => handleRemove()}>
+                Remover
+            </Button>
+            </div>
+          </Form>
+        </ModalStyledDelete>
       )}
     </>
   )
