@@ -24,6 +24,10 @@
 
 The project consists of the development of a system to control the criminal codes of the Police Department of the Upper City. For this, an application was built where the user will authenticate and after success you will be able to consult, include, edit, delete and view the criminal codes of Cidade Alta.
 
+<h1 align="center">
+<img width="600" src=".github/screen-1.png" alt="Screenshot" />
+</h1>
+
 ## ✨ Technologies
 
 - [React](https://reactjs.org)
