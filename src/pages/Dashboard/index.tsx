@@ -59,7 +59,7 @@ interface FormAttributes {
   status: boolean,
 }
 
-function Dashboard({ fetch, codePenals, add, remove, edit, orderActive, orderInactive }: any) {
+function Dashboard({ fetch, codePenals, add, remove, edit, orderActive, orderInactive, orderTempoMenor, orderTempoMaior }: any) {
   const formRef = useRef<FormHandles>(null);
 
   const [isOpen, setIsOpen] = useState(false);
@@ -76,15 +76,17 @@ function Dashboard({ fetch, codePenals, add, remove, edit, orderActive, orderIna
   const [multa, setMulta] = useState('');
   const [tempoPrisao, setTempoPrisao] = useState('');
 
-  const [filteredStatus, setFilteredStatus] = useState({
+  const [filtered, setFiltered] = useState({
     actived: false,
     inactived: false,
+    tempoMaior: false,
+    tempoMenor: false,
   });
 
   const [isChecked, setIsChecked] = useState(true);
 
   useEffect(() => {
-    if (filteredStatus.actived === true || filteredStatus.inactived === true) {
+    if (filtered.actived === true || filtered.inactived === true || filtered.tempoMaior === true || filtered.tempoMenor === true) {
       return
     }
     async function obterPenal() {
@@ -94,18 +96,28 @@ function Dashboard({ fetch, codePenals, add, remove, edit, orderActive, orderIna
       setLoading(false)
     }
     obterPenal();
-  }, [fetch, filteredStatus])
+  }, [fetch, filtered.actived, filtered.inactived, filtered.tempoMaior, filtered.tempoMenor])
 
   const filteredActive = useCallback((value: string) => {
     if (value === '1') {
-      setFilteredStatus({ ...filteredStatus, actived: true, inactived: false })
+      setFiltered({ ...filtered, actived: true, inactived: false, tempoMaior: false, tempoMenor: false })
       orderActive()
     } else if (value === '2') {
-      setFilteredStatus({ ...filteredStatus, inactived: true, actived: false })
+      setFiltered({ ...filtered, inactived: true, actived: false, tempoMaior: false, tempoMenor: false })
       orderInactive()
     }
 
-  }, [filteredStatus, orderActive, orderInactive])
+  }, [filtered, orderActive, orderInactive])
+
+  const filteredTempo = useCallback((value: string) => {
+    if (value === 'Maior') {
+      setFiltered({ ...filtered, actived: false, inactived: false, tempoMaior: true, tempoMenor: false })
+      orderTempoMaior()
+    } else if (value === 'Menor') {
+      setFiltered({ ...filtered, inactived: false, actived: false, tempoMaior: false, tempoMenor: true })
+      orderTempoMenor()
+    }
+  }, [filtered, orderTempoMaior, orderTempoMenor])
 
   function toggleButtonActive() {
     setIsChecked(true)
@@ -252,6 +264,20 @@ function Dashboard({ fetch, codePenals, add, remove, edit, orderActive, orderIna
                 </option>
                 <option value="2">
                   Inativo
+                </option>
+              </select>
+
+              <select
+                onChange={(e) => filteredTempo(e.target.value)}
+              >
+                <option>
+                  Tempo
+                </option>
+                <option value="Maior">
+                  Maior
+                </option>
+                <option value="Menor">
+                  Menor
                 </option>
               </select>
             </div>
@@ -518,7 +544,12 @@ const mapDispatchToProps = (dispatch: any) => ({
   orderActive: () =>
     dispatch(actionsPenal.orderActivePenal()),
   orderInactive: () =>
-    dispatch(actionsPenal.orderInactivePenal())
+    dispatch(actionsPenal.orderInactivePenal()),
+  orderTempoMenor: () =>
+    dispatch(actionsPenal.orderTempoMenorPenal()),
+  orderTempoMaior: () =>
+    dispatch(actionsPenal.orderTempoMaiorPenal())
+
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Dashboard)

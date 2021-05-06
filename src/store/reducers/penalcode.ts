@@ -56,6 +56,21 @@ export function penal(state = INITIAL_STATE, action: PenalProps) {
     return {
       codes: filtered
     }
+  } else if (action.type === 'PENAL_ORDERTEMPOMENOR') {
+
+    const filtered = state.codes.sort(function (a: any, b: any) {
+      return a.tempoPrisao - b.tempoPrisao;
+    })
+    return {
+      codes: filtered
+    }
+  } else if (action.type === 'PENAL_ORDERTEMPOMAIOR') {
+    const filtered = state.codes.sort(function (a: any, b: any) {
+      return b.tempoPrisao - a.tempoPrisao;
+    })
+    return {
+      codes: filtered
+    }
   }
   return state
 }

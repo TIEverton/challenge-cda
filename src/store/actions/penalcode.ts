@@ -40,3 +40,15 @@ export function orderInactivePenal() {
     type: 'PENAL_ORDERINACTIVE',
   }
 }
+
+export function orderTempoMenorPenal() {
+  return {
+    type: 'PENAL_ORDERTEMPOMENOR',
+  }
+}
+
+export function orderTempoMaiorPenal() {
+  return {
+    type: 'PENAL_ORDERTEMPOMAIOR',
+  }
+}
