@@ -52,3 +52,16 @@ export function orderTempoMaiorPenal() {
     type: 'PENAL_ORDERTEMPOMAIOR',
   }
 }
+
+
+export function orderMultaMenorPenal() {
+  return {
+    type: 'PENAL_ORDERMULTAMENOR',
+  }
+}
+
+export function orderMultaMaiorPenal() {
+  return {
+    type: 'PENAL_ORDERMULTAMAIOR',
+  }
+}

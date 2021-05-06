@@ -59,7 +59,16 @@ interface FormAttributes {
   status: boolean,
 }
 
-function Dashboard({ fetch, codePenals, add, remove, edit, orderActive, orderInactive, orderTempoMenor, orderTempoMaior }: any) {
+function Dashboard({
+  fetch,
+  codePenals,
+  add,
+  remove,
+  edit,
+  orderActive, orderInactive,
+  orderTempoMenor, orderTempoMaior,
+  orderMultaMenor, orderMultaMaior
+}: any) {
   const formRef = useRef<FormHandles>(null);
 
   const [isOpen, setIsOpen] = useState(false);
@@ -118,6 +127,16 @@ function Dashboard({ fetch, codePenals, add, remove, edit, orderActive, orderIna
       orderTempoMenor()
     }
   }, [filtered, orderTempoMaior, orderTempoMenor])
+
+  const filteredMulta = useCallback((value: string) => {
+    if (value === 'Maior') {
+      setFiltered({ ...filtered, actived: false, inactived: false, tempoMaior: true, tempoMenor: false })
+      orderMultaMaior()
+    } else if (value === 'Menor') {
+      setFiltered({ ...filtered, inactived: false, actived: false, tempoMaior: false, tempoMenor: true })
+      orderMultaMenor()
+    }
+  }, [filtered, orderMultaMaior, orderMultaMenor])
 
   function toggleButtonActive() {
     setIsChecked(true)
@@ -253,32 +272,22 @@ function Dashboard({ fetch, codePenals, add, remove, edit, orderActive, orderIna
               <p>
                 Ordene por
               </p>
-              <select
-                onChange={(e) => filteredActive(e.target.value)}
-              >
-                <option>
-                  Status
-                </option>
-                <option value="1">
-                  Ativo
-                </option>
-                <option value="2">
-                  Inativo
-                </option>
+              <select onChange={(e) => filteredActive(e.target.value)}>
+                <option> Status </option>
+                <option value="1">Ativo</option>
+                <option value="2"> Inativo </option>
               </select>
 
-              <select
-                onChange={(e) => filteredTempo(e.target.value)}
-              >
-                <option>
-                  Tempo
-                </option>
-                <option value="Maior">
-                  Maior
-                </option>
-                <option value="Menor">
-                  Menor
-                </option>
+              <select onChange={(e) => filteredTempo(e.target.value)}>
+                <option>Tempo</option>
+                <option value="Maior">Maior</option>
+                <option value="Menor">Menor</option>
+              </select>
+
+              <select onChange={(e) => filteredMulta(e.target.value)}>
+                <option>Multa</option>
+                <option value="Maior">Maior</option>
+                <option value="Menor">Menor</option>
               </select>
             </div>
             <button type="button" onClick={() => setIsOpen(true)}>
@@ -548,7 +557,11 @@ const mapDispatchToProps = (dispatch: any) => ({
   orderTempoMenor: () =>
     dispatch(actionsPenal.orderTempoMenorPenal()),
   orderTempoMaior: () =>
-    dispatch(actionsPenal.orderTempoMaiorPenal())
+    dispatch(actionsPenal.orderTempoMaiorPenal()),
+  orderMultaMenor: () =>
+    dispatch(actionsPenal.orderMultaMenorPenal()),
+  orderMultaMaior: () =>
+    dispatch(actionsPenal.orderMultaMaiorPenal())
 
 });
 

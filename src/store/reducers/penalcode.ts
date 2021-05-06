@@ -71,6 +71,21 @@ export function penal(state = INITIAL_STATE, action: PenalProps) {
     return {
       codes: filtered
     }
+  } else if (action.type === 'PENAL_ORDERMULTAMENOR') {
+
+    const filtered = state.codes.sort(function (a: any, b: any) {
+      return a.multa - b.multa;
+    })
+    return {
+      codes: filtered
+    }
+  } else if (action.type === 'PENAL_ORDERMULTAMAIOR') {
+    const filtered = state.codes.sort(function (a: any, b: any) {
+      return b.multa - a.multa;
+    })
+    return {
+      codes: filtered
+    }
   }
   return state
 }
